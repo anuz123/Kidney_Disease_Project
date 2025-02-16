@@ -25,15 +25,12 @@ def home():
     return render_template('index.html')
 
 
-
-
 @app.route("/train", methods=['GET','POST'])
 @cross_origin()
 def trainRoute():
     os.system("python main.py")
     # os.system("dvc repro")
     return "Training done successfully!"
-
 
 
 @app.route("/predict", methods=['POST'])
