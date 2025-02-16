@@ -1,8 +1,8 @@
 from cnnClassifier.config.configuration import ConfigurationManager
 from cnnClassifier.components.model_evaluation_mlflow import Evaluation
 from cnnClassifier import logger
-
-
+import dagshub
+import mlflow
 
 STAGE_NAME = "Evaluation stage"
 
@@ -12,14 +12,16 @@ class EvaluationPipeline:
         pass
 
     def main(self):
+        dagshub.init(repo_owner='anuz123', repo_name='Kidney_Disease_Project', mlflow=True)
+        with mlflow.start_run():
+            mlflow.log_param('parameter name', 'value')
+            mlflow.log_metric('metric name', 1)
         config = ConfigurationManager()
         eval_config = config.get_evaluation_config()
         evaluation = Evaluation(eval_config)
         evaluation.evaluation()
         evaluation.save_score()
-        # evaluation.log_into_mlflow()
-
-
+        evaluation.log_into_mlflow()
 
 
 if __name__ == '__main__':
